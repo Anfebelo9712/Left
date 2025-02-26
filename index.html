@@ -2,38 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Mapas de Colombia</title>
+  <title>Mapa de Colombia con Control Deslizante</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    #map, #map2 {
-      height: 45vh;
+    #map {
+      height: 90vh;
       width: 100%;
-      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h2>Mapa Base de Colombia</h2>
+  <h2>Mapa de Colombia: Comparación con Barra Deslizante</h2>
   <div id="map"></div>
 
-  <h2>Mapa Político de Colombia</h2>
-  <div id="map2"></div>
-
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side/leaflet-side-by-side.min.js"></script>
   <script>
-    // Mapa base (OpenStreetMap)
+    // Inicializar el mapa centrado en Colombia
     var map = L.map('map').setView([4.5709, -74.2973], 6);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+    // Capa izquierda: Mapa político (CartoDB Positron)
+    var politico = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '© CartoDB | © OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Capa derecha: Mapa base (OpenStreetMap)
+    var base = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Mapa político (CartoDB Positron)
-    var map2 = L.map('map2').setView([4.5709, -74.2973], 6);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      attribution: '© CartoDB | © OpenStreetMap contributors'
-    }).addTo(map2);
+    // Crear control deslizante para comparar las capas
+    var sideBySide = L.control.sideBySide(politico, base).addTo(map);
   </script>
 </body>
 </html>
