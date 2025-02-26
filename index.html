@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapas de Colombia</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map, #map2 {
+      height: 45vh;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Mapa Base de Colombia</h2>
+  <div id="map"></div>
+
+  <h2>Mapa Político de Colombia</h2>
+  <div id="map2"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Mapa base (OpenStreetMap)
+    var map = L.map('map').setView([4.5709, -74.2973], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Mapa político (CartoDB Positron)
+    var map2 = L.map('map2').setView([4.5709, -74.2973], 6);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '© CartoDB | © OpenStreetMap contributors'
+    }).addTo(map2);
+  </script>
+</body>
+</html>
