@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Mapa de Colombia con Control Deslizante Fijo</title>
+  <title>Mapa de Colombia con Comparación Fija y Herramientas de Dibujo</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css" />
   <style>
     #map {
       height: 90vh;
@@ -12,18 +13,20 @@
   </style>
 </head>
 <body>
-  <h2>Mapa de Colombia: Comparación con Barra Deslizante Fija</h2>
+  <h2>Mapa de Colombia: Comparación con Barra Deslizante Fija y Dibujo</h2>
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side/leaflet-side-by-side.min.js"></script>
+  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.min.js"></script>
+
   <script>
     // Inicializar el mapa centrado en Colombia con interacciones desactivadas
     var map = L.map('map', {
       center: [4.5709, -74.2973],
       zoom: 6,
       zoomControl: false,       // Desactiva el control de zoom
-      dragging: false,          // Desactiva el arrastre
+      dragging: false,          // Desactiva el arrastre (paneo)
       scrollWheelZoom: false,   // Desactiva el zoom con la rueda del ratón
       doubleClickZoom: false,   // Desactiva el zoom con doble clic
       boxZoom: false,           // Desactiva el zoom de caja
@@ -45,6 +48,22 @@
 
     // Crear control deslizante para comparar las capas
     var sideBySide = L.control.sideBySide(politico, base).addTo(map);
+
+    // Activar herramientas de dibujo con Geoman (sin afectar la fijación del mapa)
+    map.pm.addControls({
+      position: 'topleft',
+      drawMarker: true,    // Permitir dibujar puntos
+      drawPolyline: true,  // Permitir dibujar líneas
+      drawPolygon: true,   // Permitir dibujar polígonos
+      editMode: true,      // Permitir editar geometrías
+      removalMode: true    // Permitir eliminar geometrías
+    });
+
+    // Permitir interacción sobre las capas dibujadas (para editar/mover los objetos)
+    map.on('pm:create', function(e) {
+      e.layer.pm.enable();  // Habilita la edición en la geometría recién creada
+      console.log('Geometría creada:', e.layer.toGeoJSON());
+    });
   </script>
 </body>
 </html>
